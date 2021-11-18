@@ -1,0 +1,10 @@
+@media(min-width: 768px) {
+  .user-input {
+    width: 50%;
+  }
+}
+
+.custom-btn {
+  width: 180px;
+  margin-right: 10px;
+}
