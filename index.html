@@ -48,12 +48,10 @@
           <p class="lead my-4">Javascript allows us to make the website more interative,
             compared to just a usual static HTML. Programs below are to demonstrate HTML
             element and attributes, CSS style manipulation and also HTML events. </p>
-          <button class="btn btn-primary btn-lg custom-btn" value="Horoscope"
-            onclick="switchHoroscopeOrFizzBuzz(this.value)">P1 -
-            Horoscope</button>
-          <button class=" btn btn-success btn-lg custom-btn" value="FizzBuzz"
-            onclick="switchHoroscopeOrFizzBuzz(this.value)">P2 -
-            FizzBuzz</button>
+          <button class="btn btn-primary btn-lg custom-btn" onclick="switchToHoroscope()">
+            P1 - Horoscope</button>
+          <button class=" btn btn-success btn-lg custom-btn" onclick="switchToFizzBuzz()">
+            P2 - FizzBuzz</button>
         </div>
         <img class="img-fluid w-50 d-none d-sm-block" src="img/showcase.svg" alt="">
       </div>
@@ -68,8 +66,7 @@
         <div class="input-group user-input">
           <input type="text" class="form-control" id="program-input" disabled placeholder="Input is not needed...">
           <div class="input-group-append">
-            <button class="btn btn-dark btn-lg" type="button" id="program-start-button"
-              onclick="startHoroscope()">Click</button>
+            <button class="btn btn-dark btn-lg" type="button" onclick="runProgram()">Click</button>
             <button class="btn btn-danger btn-lg" type="button" id="button-clear" onclick="clearScreen()">Clear</button>
           </div>
         </div>

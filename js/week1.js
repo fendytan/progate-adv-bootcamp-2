@@ -1,7 +1,6 @@
 const program_color = document.getElementById("program-color");
 const program_input = document.getElementById("program-input");
 const program_label = document.getElementById("program-label");
-const program_start_button = document.getElementById("program-start-button");
 const program_result = document.getElementById("program-result");
 
 const P1_LABEL = "Horoscope - Keberuntungan Anda Hari ini:";
@@ -11,22 +10,9 @@ const P2_INPUT_PLACEHOLDER = "Enter a number above 0 ...";
 
 let current_program = "Horoscope";
 
-function switchHoroscopeOrFizzBuzz(program_name) {
-  if (current_program != program_name) {
-    program_color.classList.toggle("bg-success");
-    program_color.classList.toggle("bg-primary");
-
-    program_input.value = "";
-
-    program_label.textContent = (program_name == "Horoscope") ? P1_LABEL : P2_LABEL;
-    program_input.disabled = (program_name == "Horoscope") ? true : false;
-    program_input.placeholder = (program_name == "Horoscope") ? P1_INPUT_PLACEHOLDER : P2_INPUT_PLACEHOLDER;
-
-    const temp = (program_name == "Horoscope") ? "startHoroscope()" : "startFizzBuzz()";
-    program_start_button.setAttribute('onclick', temp);
-
-    current_program = program_name;
-  }
+function toggleColor() {
+  program_color.classList.toggle("bg-success");
+  program_color.classList.toggle("bg-primary");
 }
 
 function clearScreen() {
@@ -34,6 +20,30 @@ function clearScreen() {
   while (program_result.firstChild) {
     program_result.firstChild.remove();
   }
+}
+
+function switchToHoroscope() {
+  if (current_program != "Horoscope") toggleColor();
+
+  clearScreen();
+
+  program_label.textContent = P1_LABEL;
+  program_input.disabled = true;
+  program_input.placeholder = P1_INPUT_PLACEHOLDER;
+
+  current_program = "Horoscope";
+}
+
+function switchToFizzBuzz() {
+  if (current_program != "FizzBuzz") toggleColor();
+
+  clearScreen();
+
+  program_label.textContent = P2_LABEL;
+  program_input.disabled = false;
+  program_input.placeholder = P2_INPUT_PLACEHOLDER;
+
+  current_program = "FizzBuzz";
 }
 
 function alert(message, type) {
@@ -54,13 +64,13 @@ function weightedRandom(prob) {
   }
 }
 
-function startHoroscope() {
+function calcHoroscope() {
+  let result, type;
 
   // Probability
   // Hebat = 20%
   // Boleh Juga = 60%
   // Mengerikan = 20%
-
   switch (Math.floor(weightedRandom({ 0: 0.2, 1: 0.6, 2: 0.2 }))) {
     case 0:
       result = 'Hebat!!';
@@ -76,12 +86,12 @@ function startHoroscope() {
       break;
   }
 
-  alert(result, type);
+  return [result, type];
 }
 
-function startFizzBuzz() {
-  // const user_input_value = program_input.value;
-  // console.log(user_input_value);
+function calcFizzBuzz() {
+  let result, type;
+
   const fizz = (program_input.value % 3) == 0;
   const buzz = (program_input.value % 5) == 0;
 
@@ -101,6 +111,13 @@ function startFizzBuzz() {
     result = program_input.value;
     type = "secondary";
   }
+
+  return [result, type];
+}
+
+function runProgram() {
+
+  let [result, type] = (current_program == "Horoscope") ? calcHoroscope() : calcFizzBuzz();
 
   alert(result, type);
 }
