@@ -5,10 +5,14 @@ const program_result = document.getElementById("program-result");
 
 const P1_LABEL = "Horoscope - Keberuntungan Anda Hari ini:";
 const P2_LABEL = "FizzBuzz - Type a number:";
+const P1_INPUT_STATUS = true;
+const P2_INPUT_STATUS = false;
 const P1_INPUT_PLACEHOLDER = "Input is not needed...";
 const P2_INPUT_PLACEHOLDER = "Enter a number above 0 ...";
+const P1_PROGRAM_NAME = "P1";
+const P2_PROGRAM_NAME = "P2";
 
-let current_program = "Horoscope";
+let current_program = P1_PROGRAM_NAME;
 
 function toggleColor() {
   program_color.classList.toggle("bg-success");
@@ -22,29 +26,25 @@ function clearScreen() {
   }
 }
 
-function switchToHoroscope() {
-  if (current_program != "Horoscope") toggleColor();
-
+function setProgram(label, input_status, placeholder, program_name) {
   clearScreen();
-
-  program_label.textContent = P1_LABEL;
-  program_input.disabled = true;
-  program_input.placeholder = P1_INPUT_PLACEHOLDER;
-
-  current_program = "Horoscope";
+  program_label.textContent = label;
+  program_input.disabled = input_status;
+  program_input.placeholder = placeholder;
+  current_program = program_name;
 }
 
-function switchToFizzBuzz() {
-  if (current_program != "FizzBuzz") toggleColor();
+const btn_P1 = document.getElementById("btn-P1");
+btn_P1.addEventListener("click", function () {
+  if (current_program != P1_PROGRAM_NAME) toggleColor();
+  setProgram(P1_LABEL, P1_INPUT_STATUS, P1_INPUT_PLACEHOLDER, P1_PROGRAM_NAME);
+});
 
-  clearScreen();
-
-  program_label.textContent = P2_LABEL;
-  program_input.disabled = false;
-  program_input.placeholder = P2_INPUT_PLACEHOLDER;
-
-  current_program = "FizzBuzz";
-}
+const btn_P2 = document.getElementById("btn-P2");
+btn_P2.addEventListener("click", function () {
+  if (current_program != P2_PROGRAM_NAME) toggleColor();
+  setProgram(P2_LABEL, P2_INPUT_STATUS, P2_INPUT_PLACEHOLDER, P2_PROGRAM_NAME);
+});
 
 function alert(message, type) {
   let wrapper = document.createElement("div");
@@ -117,7 +117,7 @@ function calcFizzBuzz() {
 
 function runProgram() {
 
-  let [result, type] = (current_program == "Horoscope") ? calcHoroscope() : calcFizzBuzz();
+  let [result, type] = (current_program == P1_PROGRAM_NAME) ? calcHoroscope() : calcFizzBuzz();
 
   alert(result, type);
 }
