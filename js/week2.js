@@ -2,6 +2,10 @@ const btn_A = document.querySelector(".a");
 const btn_B = document.querySelector(".b");
 const btn_left = document.querySelector(".left");
 const btn_right = document.querySelector(".right");
+const btn_P1 = document.getElementById("btn-P1");
+const btn_P2 = document.getElementById("btn-P2");
+const btn_P2_prev = document.querySelector("#btn-P2-prev");
+const btn_P2_next = document.querySelector("#btn-P2-next");
 
 const program_color = document.getElementById("program-color");
 const program_input = document.getElementById("program-input");
@@ -23,16 +27,17 @@ const P2_LABEL = "Show Pokemon on Gallery View";
 const P1_INPUT_STATUS = false;
 const P2_INPUT_STATUS = false;
 const P1_INPUT_PLACEHOLDER = "Enter a VALID Pokemon's name or ID!";
-const P2_INPUT_PLACEHOLDER = "Enter 0 to start from beginning or you can offset";
+const P2_INPUT_PLACEHOLDER = "Enter 0 to start from beginning! Or enter 100 to start from Pokemon 101!";
 const P1_PROGRAM_NAME = "P1";
 const P2_PROGRAM_NAME = "P2";
 
 let current_pokemon_id = 1;
-let pokemon_collection;
+// let pokemon_collection;
+let prev_page_url;
+let next_page_url;
+let current_program = P1_PROGRAM_NAME;
 
 const POKEMON_API = "https://pokeapi.co/api/v2/pokemon/";
-
-let current_program = P1_PROGRAM_NAME;
 
 const POKEMON_TYPE_COLOR = {
   grass: "#78C850",
@@ -52,11 +57,20 @@ const POKEMON_TYPE_COLOR = {
   dragon: "#7038F8",
 }
 
-const btn_P1 = document.getElementById("btn-P1");
-const btn_P2 = document.getElementById("btn-P2");
-
 btn_P1.addEventListener("click", detectUI);
 btn_P2.addEventListener("click", detectUI);
+
+btn_P2_prev.addEventListener("click", async function () {
+  console.log(prev_page_url);
+  document.getElementById('P2-container').innerText = "";
+  await catchThemAll(prev_page_url);
+});
+
+btn_P2_next.addEventListener("click", async function () {
+  console.log(next_page_url);
+  document.getElementById('P2-container').innerText = "";
+  await catchThemAll(next_page_url);
+});
 
 function detectUI(event) {
   if (event.target.id == "btn-P1") {
@@ -112,10 +126,19 @@ btn_click.addEventListener("click", async function () {
     const pokemon = await catchCurrentPokemon();
     current_pokemon_id = pokemon["id"];
   } else {
-    catchThemAll();
+    catchThemAll(POKEMON_API + "?offset=" + program_input.value + "&limit=30");
+    playCatchThemAllVoice();
     document.getElementById('P2-container').innerText = "";
+    btn_P2_prev.disabled = false;
+    btn_P2_next.disabled = false;
   }
 });
+
+function playCatchThemAllVoice() {
+  let audio = new Audio("audio/gottacatchemall.mp3");
+  audio.loop = false;
+  audio.play();
+}
 
 function playPikachuVoice() {
   if (current_pokemon_id == 25) {
@@ -178,92 +201,50 @@ function showPokemonOnGameboy(pokemon) {
   screen_display.style.backgroundColor = POKEMON_TYPE_COLOR[response_type];
 }
 
-async function catchThemAll() {
+async function catchThemAll(url) {
 
-  const P2_url = POKEMON_API + "?offset=" + program_input.value + "&limit=30";
-  console.log(P2_url);
-  const many_pokemon = await fetch(P2_url)
+  const many_pokemon = await fetch(url)
     .then(response => response.json());
 
-
   console.log(many_pokemon);
+
+  next_page_url = many_pokemon.next;
+  prev_page_url = many_pokemon.previous;
+
   const results = many_pokemon["results"];
 
-  let main_wrapper;
-
   for (let i = 0; i < results.length; i++) {
-    let wrapper1, wrapper2;
 
     const pokemon = await catchPokemonByURL(results[i].url);
 
-    if (i == 0 || i == 5 || i == 10 || i == 15 || i == 20 || i == 25) {
-      wrapper1 = document.createElement("div");
-      wrapper1.setAttribute('class', 'row text-center g-5 mb-5');
+    let parent_node = document.createElement("div");
+    parent_node.setAttribute('class', 'col');
 
-      wrapper2 = document.createElement("div");
-      wrapper2.setAttribute('class', 'col-md');
-      wrapper1.append(wrapper2);
+    let new_node = document.createElement("div");
+    new_node.setAttribute('class', `card h-100 ${pokemon["types"][0]["type"]["name"]}`);
+    new_node.setAttribute('data-tilt', '');
+    parent_node.append(new_node);
 
-      main_wrapper = wrapper1;
+    new_node = document.createElement("img");
+    new_node.setAttribute('src', pokemon["sprites"]["front_default"]);
+    new_node.setAttribute('class', 'card-img-top');
+    parent_node.firstChild.append(new_node);
 
-      wrapper1 = document.createElement("div");
-      wrapper1.setAttribute('class', `card ${pokemon["types"][0]["type"]["name"]} text-dark`);
-      wrapper2.append(wrapper1);
+    new_node = document.createElement("div");
+    new_node.setAttribute('class', 'card-body');
+    parent_node.firstChild.append(new_node);
 
-      wrapper2 = document.createElement("div");
-      wrapper2.setAttribute('class', 'card-body text-center my-4');
-      wrapper1.append(wrapper2);
+    new_node = document.createElement("h5");
+    new_node.setAttribute('class', 'card-title');
+    new_node.innerText = pokemon["id"] + ' - ' + pokemon["name"];
+    parent_node.firstChild.lastChild.append(new_node);
 
-      wrapper1 = document.createElement("h4");
-      wrapper1.setAttribute('class', 'card-title mb-3');
-      wrapper1.innerText = pokemon["id"] + ' ' + pokemon["name"];
-      wrapper2.append(wrapper1);
+    new_node = document.createElement("p");
+    new_node.setAttribute('class', 'card-text');
+    new_node.innerText = "Type: " + pokemon["types"][0]["type"]["name"];
 
-      wrapper1 = document.createElement("img");
-      wrapper1.setAttribute('src', pokemon["sprites"]["front_default"]);
-      wrapper2.append(wrapper1);
+    parent_node.firstChild.lastChild.append(new_node);
 
-      wrapper1 = document.createElement("h5");
-      wrapper1.setAttribute('class', 'card-text pb-3');
-      wrapper1.innerText = "Type: " + pokemon["types"][0]["type"]["name"];
-      wrapper2.append(wrapper1);
-
-    } else {
-      wrapper2 = document.createElement("div");
-      wrapper2.setAttribute('class', 'col-md');
-
-      main_wrapper.append(wrapper2);
-
-      wrapper1 = document.createElement("div");
-      wrapper1.setAttribute('class', `card ${pokemon["types"][0]["type"]["name"]} text-dark`);
-      wrapper2.append(wrapper1);
-
-      wrapper2 = document.createElement("div");
-      wrapper2.setAttribute('class', 'card-body text-center my-4');
-      wrapper1.append(wrapper2);
-
-      wrapper1 = document.createElement("h4");
-      wrapper1.setAttribute('class', 'card-title mb-3');
-      wrapper1.innerText = pokemon["id"] + ' ' + pokemon["name"];
-      wrapper2.append(wrapper1);
-
-      wrapper1 = document.createElement("img");
-      wrapper1.setAttribute('src', pokemon["sprites"]["front_default"]);
-      wrapper2.append(wrapper1);
-
-      wrapper1 = document.createElement("h5");
-      wrapper1.setAttribute('class', 'card-text pb-3');
-      wrapper1.innerText = "Type: " + pokemon["types"][0]["type"]["name"];
-      wrapper2.append(wrapper1);
-    }
-
-    if (i == 4 || i == 9 || i == 14 || i == 19 || i == 24 || i == 29) {
-      document.getElementById('P2-container').appendChild(main_wrapper);
-    }
+    document.querySelector("#P2-container").append(parent_node);
   }
-  // return many_pokemon;
 }
-
-
-
-

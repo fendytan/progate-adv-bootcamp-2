@@ -59,9 +59,9 @@
       <div class="d-sm-flex align-items-center justify-content-between">
         <div>
           <h1>Asynchronous <span class="text-warning">Javascript</span> and API</h1>
-          <p class="lead my-4">Javascript allows us to make the website more interative,
-            compared to just a usual static HTML. Programs below are to demonstrate HTML
-            element and attributes, CSS style manipulation and also HTML events. </p>
+          <p class="lead my-4">We will use asynchronous process when asking data from another server.
+            Asynchronous will make our code more efficient since we can do more code execution and still
+            running process that usually takes longer time to finished.</p>
           <button class="btn btn-primary btn-lg custom-btn" id="btn-P1">P1 - Pikachu</button>
           <button class=" btn btn-success btn-lg custom-btn" id="btn-P2">P2 - Show 30</button>
         </div>
@@ -89,8 +89,11 @@
     <div class="container">
       <div id="program-result">
 
-        <h2>Gameboy CSS with Interactive Buttons</h2>
-        <p class="lead">Press A to show Pikachu data. Press LEFT or RIGHT for next data.</p>
+        <h2><a href="https://codepen.io/brundolf/pen/bZagbQ" target="_blank">Gameboy CSS</a> with Interactive Buttons
+        </h2>
+        <p class="lead">Press A to show Pikachu data. Press LEFT or RIGHT for next data. Or enter a valid Pokemon
+          <strong>name or ID</strong> above.
+        </p>
 
         <!-- https://www.youtube.com/watch?v=wXjSaZb67n8 -->
         <!-- https://codepen.io/brundolf/pen/bZagbQ -->
@@ -244,9 +247,18 @@
 
   <!-- Boxes -->
   <section id="P2-result" class="p-5 hide">
-    <div class="container" id="P2-container">
+    <div class="container text-center mb-5">
+      <h2>Showing 30 Pokemon with Bootstrap cards</h2>
+      <p class="lead">You need to enter a starting Pokemon ID above first!</p>
+    </div>
+    <div class="div container text-center mb-5">
 
+      <div class="btn-group mb-4" role="group">
+        <button type="button" class="btn btn-outline-primary" id="btn-P2-prev" disabled>Prev</button>
+        <button type="button" class="btn btn-outline-primary" id="btn-P2-next" disabled>Next</button>
+      </div>
 
+      <div class="row row-cols-1 row-cols-md-6 g-3" id="P2-container"></div>
 
     </div>
   </section>
