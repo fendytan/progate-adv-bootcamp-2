@@ -498,3 +498,19 @@ body {
 .dragon {
   background-color: #7038F8;
 }
+
+.card {
+  position: relative;
+  height: 500px;
+  transform-style: preserve-3d;
+}
+
+.poke-image {
+  transform: translate3d(0, 0, 100px);
+  transition: 0.5s;
+
+}
+
+.card:hover .poke-image {
+  transform: translate3d(0, 0, 100px) scale(1.8);
+}

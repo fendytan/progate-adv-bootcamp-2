@@ -222,12 +222,12 @@ async function catchThemAll(url) {
 
     let new_node = document.createElement("div");
     new_node.setAttribute('class', `card h-100 ${pokemon["types"][0]["type"]["name"]}`);
-    new_node.setAttribute('data-tilt', '');
+    // new_node.setAttribute('data-tilt', '');
     parent_node.append(new_node);
 
     new_node = document.createElement("img");
     new_node.setAttribute('src', pokemon["sprites"]["front_default"]);
-    new_node.setAttribute('class', 'card-img-top');
+    new_node.setAttribute('class', 'card-img-top poke-image');
     parent_node.firstChild.append(new_node);
 
     new_node = document.createElement("div");
@@ -235,7 +235,7 @@ async function catchThemAll(url) {
     parent_node.firstChild.append(new_node);
 
     new_node = document.createElement("h5");
-    new_node.setAttribute('class', 'card-title');
+    new_node.setAttribute('class', 'card-title poke-name');
     new_node.innerText = pokemon["id"] + ' - ' + pokemon["name"];
     parent_node.firstChild.lastChild.append(new_node);
 
@@ -247,4 +247,9 @@ async function catchThemAll(url) {
 
     document.querySelector("#P2-container").append(parent_node);
   }
+
+  VanillaTilt.init(document.querySelectorAll(".card"), {
+    max: 25,
+    speed: 400,
+  });
 }
