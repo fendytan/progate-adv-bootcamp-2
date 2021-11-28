@@ -278,7 +278,7 @@ function showPokemonOnCards(p) {
     <div class="card h-100 ${p["types"][0]["type"]["name"]}" data-pokemonid="${p["id"]}">
       <img src="${p["sprites"]["front_default"]}" class="card-img-top poke-image">
       <div class="card-body">
-        <h5 class="card-title">${p["id"]} - ${p["name"].toUpperCase()}</h5>
+        <h5 class="card-title">${p["id"]} ${p["name"].toUpperCase()}</h5>
       </div>
     </div>
     `;
